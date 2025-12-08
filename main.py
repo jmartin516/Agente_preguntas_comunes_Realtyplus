@@ -46,15 +46,31 @@ def detect_language(text: str) -> str:
     spanish_indicators = [
         'qué', 'cómo', 'cuándo', 'dónde', 'por qué', 'cuál', 'cuáles',
         'puedo', 'necesito', 'quiero', 'ayuda', 'información',
-        'países', 'incluye', 'recibo', 'apoyo', 'empezar', 'contactar'
+        'países', 'incluye', 'recibo', 'apoyo', 'empezar', 'contactar',
+        'hola', 'gracias', 'favor', 'más', 'sí', 'no', 'bueno',
+        'también', 'esto', 'eso', 'aquí', 'allí', 'ahora', 'después'
+    ]
+    
+    # Common English words that rarely appear in Spanish
+    english_indicators = [
+        'what', 'how', 'when', 'where', 'why', 'which', 'who',
+        'can', 'need', 'want', 'help', 'information', 'the', 'is',
+        'are', 'this', 'that', 'here', 'there', 'now', 'later'
     ]
 
     text_lower = text.lower()
     spanish_count = sum(1 for indicator in spanish_indicators if indicator in text_lower)
-
-    # If we find spanish indicators, it is spanish
-    if spanish_count > 0:
+    english_count = sum(1 for indicator in english_indicators if indicator in text_lower)
+    
+    print(f"DEBUG Language Detection: Spanish={spanish_count}, English={english_count}")
+    
+    # If we find more Spanish indicators, it's Spanish
+    if spanish_count > english_count:
         return 'es'
+    elif english_count > 0:
+        return 'en'
+    
+    # Default to English if no clear indicators
     return 'en'
 
 async def translate_response(response_text: str, target_language: str) -> str:
@@ -318,24 +334,7 @@ def get_category_display_name(category: str, language: str = 'en') -> str:
 
 async def start(update: Update, context):
     """Responds to the /start command."""
-    user_text = update.message.text if update.message.text else ""
-    language = detect_language(user_text)
-    
-    if language == 'es':
-        welcome_text = """¡Hola! 👋 Soy tu asistente de RealtyPlus.
-
-Puedo ayudarte con información sobre:
-• Qué es RealtyPlus
-• Franquicias y requisitos
-• Países donde operamos
-• Apoyo y capacitación
-• Pasos para comenzar
-• Y mucho más...
-
-¿Qué te gustaría saber?"""
-
-    else:
-        welcome_text = """Hello! 👋 I'm your RealtyPlus assistant.
+    welcome_text = """Hello! 👋 I'm your RealtyPlus assistant.
 
 I can help you with information about:
 • What is RealtyPlus
@@ -346,6 +345,7 @@ I can help you with information about:
 • And much more...
 
 What would you like to know?"""
+    
     await update.message.reply_text(welcome_text)
 
 async def handle_message(update: Update, context):
@@ -354,9 +354,16 @@ async def handle_message(update: Update, context):
     user_text = update.message.text
     user_id = update.effective_user.id
 
-    # detect language
-    language = detect_language(user_text)
-    print(f"Detected language: {language}")
+    # Check if we already have a saved language for this user
+    if 'user_language' in context.user_data:
+        # Use the saved language
+        language = context.user_data['user_language']
+        print(f"DEBUG: Using saved language for user: {language}")
+    else:
+        # First message from user, detect language and save it
+        language = detect_language(user_text)
+        context.user_data['user_language'] = language
+        print(f"DEBUG: First message - Detected and saved language: {language}")
     
     # Check if user is responding to a suggestion
     if context.user_data.get('awaiting_confirmation'):
@@ -371,7 +378,7 @@ async def handle_message(update: Update, context):
                 
                 if category in RESPONSES:
                     response_text = RESPONSES[category]
-                    # Translate if needed
+                    # Translate if needed using saved language
                     response_text = await translate_response(response_text, language)
                     await update.message.reply_text(response_text)
                     
@@ -385,6 +392,9 @@ async def handle_message(update: Update, context):
         except ValueError:
             # User didn't send a number, treat as new question
             context.user_data['awaiting_confirmation'] = False
+    
+    # Save the current language for future reference
+    context.user_data['user_language'] = language
     
     # Classify the question using AI
     category = await get_category_from_ai(user_text)
@@ -406,6 +416,7 @@ async def handle_message(update: Update, context):
         if similar:
             context.user_data['awaiting_confirmation'] = True
             context.user_data['suggested_categories'] = similar
+            context.user_data['user_language'] = language  # Save language for when user selects option
             
             if language == 'es':
                 suggestion_text = "No estoy seguro de haber entendido tu pregunta. ¿Te refieres a alguna de estas opciones?\n\n"
