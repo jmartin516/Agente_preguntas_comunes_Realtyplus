@@ -334,7 +334,8 @@ def get_category_display_name(category: str, language: str = 'en') -> str:
 
 async def start(update: Update, context):
     """Responds to the /start command."""
-    welcome_text = """Hello! 👋 I'm your RealtyPlus assistant.
+    welcome_text = """Hello! 👋 I'm your RealtyPlus assistant. 
+    (If your want to make the questions in spanish you can, I will respond to you in Spanish too)
 
 I can help you with information about:
 • What is RealtyPlus
