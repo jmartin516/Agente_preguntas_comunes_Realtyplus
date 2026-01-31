@@ -36,5 +36,5 @@ jobs:
           # Supporting both standard PC and ARM (NAS) architectures
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/jmartin516/agente_preguntas_comunes_realtyplus:latest
+            ghcr.io/jmartin516/agente_preguntas_comunes_realtyplus:${{ github.sha }}
