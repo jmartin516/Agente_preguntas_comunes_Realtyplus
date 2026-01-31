@@ -111,35 +111,24 @@ def get_classification_prompt(user_question: str) -> str:
     
     # Create a mapping of categories with examples in Spanish and English
     category_examples = {
+        'GREETING': 'hola, hi, hello, interesado, interested, quiero información, want information',
         'WHAT_IS_REALTYPLUS': 'qué es RealtyPlus, what is RealtyPlus, información sobre la empresa, company information',
-        'COUNTRIES_OPERATING_IN': 'en qué países operan, where do you operate, dónde están, countries',
-        'FRANCHISE_INCLUSIONS': 'qué incluye la franquicia, what is included, qué recibo, what do I get',
+        'INTERNATIONAL_PRESENCE': 'en qué países operan, where do you operate, dónde están, countries',
         'FRANCHISE_VS_MASTER': 'diferencia entre franquicia y master, difference between franchise and master',
-        'REAL_ESTATE_EXPERIENCE_REQ': 'necesito experiencia, do I need experience, requisitos de experiencia',
-        'START_ALONE_OR_TEAM': 'puedo empezar solo, can I start alone, necesito equipo, do I need a team',
-        'ONBOARDING_LAUNCH_TIME': 'cuánto tiempo para empezar, how long to start, tiempo de lanzamiento',
-        'SUPPORT_RECEIVED': 'qué apoyo recibo, what support do I get, ayuda',
-        'OPERATE_INTERNATIONALLY': 'puedo operar internacionalmente, can I work internationally, trabajo global',
-        'STEPS_TO_GET_STARTED': 'cómo empezar, how to start, pasos para comenzar, steps to begin',
-        'AREA_EXCLUSIVITY': 'exclusividad territorial, area exclusivity, territorio exclusivo',
-        'MARKETING_ASSISTANCE': 'ayuda de marketing, marketing help, publicidad, advertising support',
-        'RECRUITMENT_ASSISTANCE': 'ayuda para reclutar, recruitment help, contratar equipo',
-        'TECHNOLOGY_TOOLS_OFFERED': 'herramientas tecnológicas, technology tools, plataformas digitales',
-        'CONTACT_EXPANSION_TEAM': 'contactar, contact, hablar con alguien, speak with someone, agendar llamada, schedule call',
-        'WHERE_CAN_I_OPEN': 'dónde puedo abrir, where can I open, ubicaciones disponibles',
-        'WHY_CHOOSE_REALTYPLUS': 'por qué elegir RealtyPlus, why choose RealtyPlus, ventajas, benefits',
-        'RECEIVE_DOCUMENTS_BROCHURE': 'recibir documentos, receive documents, folleto, brochure, información',
-        'TIME_DEDICATION_REQUIRED': 'cuánto tiempo necesito dedicar, how much time required, dedicación',
-        'PHYSICAL_OFFICE_NEED': 'necesito oficina física, do I need physical office, oficina',
-        'TRAINING_FOR_TEAM': 'capacitación, training, entrenamiento, formación para el equipo',
-        'EXPAND_TO_MULTIPLE_CITIES': 'expandir a más ciudades, expand to multiple cities, varias ubicaciones',
-        'VISIT_HEADQUARTERS': 'visitar oficinas, visit headquarters, conocer la sede',
-        'GROW_BEYOND_SALES': 'crecer más allá de ventas, grow beyond sales, otros servicios',
-        'MULTIPLE_LANGUAGES_REQ': 'necesito hablar idiomas, need multiple languages, requisitos de idioma',
-        'MAIN_REQUIREMENTS_JOIN': 'requisitos principales, main requirements, qué necesito para unirme',
-        'CONTACT_OTHER_FRANCHISEES': 'contactar otros franquiciados, contact other franchisees, testimonios',
-        'HOW_INTERNATIONAL_SYSTEM_WORKS': 'cómo funciona el sistema internacional, how international system works',
-        'GROW_QUICKLY_POSSIBLE': 'puedo crecer rápido, can I grow quickly, crecimiento rápido',
+        'REQUIRED_EXPERIENCE': 'necesito experiencia, do I need experience, requisitos de experiencia',
+        'REVENUE_STREAMS': 'cómo gano dinero, how do I make money, ingresos, revenue',
+        'SCALABILITY': 'es escalable, is it scalable, growth, crecimiento, negocio escalable',
+        'OWN_BRAND': 'puedo mantener mi marca, can I keep my brand, co-branding',
+        'PHYSICAL_OFFICE': 'necesito oficina física, do I need physical office, oficina',
+        'SUPPORT_AND_TRAINING': 'qué apoyo recibo, what support do I get, capacitación, training, manuales',
+        'MARKETING_SUPPORT': 'ayuda de marketing, marketing help, publicidad, advertising',
+        'TECHNOLOGY': 'herramientas tecnológicas, technology tools, software, digital tools',
+        'INTERNATIONAL_CLIENTS': 'clientes internacionales, international clients, inversores, investors, cross-border',
+        'OBJECTION_LIMITED_TIME': 'no tengo tiempo, limited time, dedicación, dedication, part-time',
+        'OBJECTION_MARKET_DOUBTS': 'funcionará en mi país, market doubts, dudas mercado, will it work',
+        'DOCUMENTATION': 'folleto, brochure, presentación, presentation, enviar información, documentos',
+        'HUMAN_CONTACT': 'hablar con alguien, speak with someone, llamada, call, expansión, expansion team',
+        'SOFT_CLOSING': 'siguiente paso, next step, cómo proceder, begin, schedule call',
     }
     
     categories_with_hints = '\n'.join([
@@ -217,35 +206,24 @@ def find_similar_categories(user_question: str, top_n=3):
     user_question_lower = user_question.lower()
     
     keyword_map = {
+        'GREETING': ['hola', 'hi', 'hello', 'interesado', 'interested', 'información', 'info'],
         'WHAT_IS_REALTYPLUS': ['qué es', 'what is', 'información', 'empresa', 'company', 'realtyplus'],
-        'COUNTRIES_OPERATING_IN': ['países', 'countries', 'dónde', 'where', 'ubicación', 'location', 'operan'],
-        'FRANCHISE_INCLUSIONS': ['incluye', 'included', 'qué recibo', 'what do i get', 'beneficios', 'benefits'],
-        'FRANCHISE_VS_MASTER': ['diferencia', 'difference', 'master', 'franquicia vs'],
-        'REAL_ESTATE_EXPERIENCE_REQ': ['experiencia', 'experience', 'necesito', 'requisitos'],
-        'START_ALONE_OR_TEAM': ['solo', 'alone', 'equipo', 'team'],
-        'ONBOARDING_LAUNCH_TIME': ['cuánto tiempo', 'how long', 'tiempo', 'launch', 'empezar'],
-        'SUPPORT_RECEIVED': ['apoyo', 'support', 'ayuda', 'help'],
-        'OPERATE_INTERNATIONALLY': ['internacional', 'international', 'global'],
-        'STEPS_TO_GET_STARTED': ['cómo empezar', 'how to start', 'pasos', 'steps', 'comenzar'],
-        'AREA_EXCLUSIVITY': ['exclusividad', 'exclusivity', 'territorio', 'territory'],
-        'MARKETING_ASSISTANCE': ['marketing', 'publicidad', 'advertising'],
-        'RECRUITMENT_ASSISTANCE': ['reclutar', 'recruitment', 'contratar', 'hiring'],
-        'TECHNOLOGY_TOOLS_OFFERED': ['tecnología', 'technology', 'herramientas', 'tools', 'plataforma'],
-        'CONTACT_EXPANSION_TEAM': ['contactar', 'contact', 'hablar', 'llamada', 'call', 'reunión'],
-        'WHERE_CAN_I_OPEN': ['dónde puedo', 'where can', 'abrir', 'open'],
-        'WHY_CHOOSE_REALTYPLUS': ['por qué', 'why', 'elegir', 'choose', 'ventajas'],
-        'RECEIVE_DOCUMENTS_BROCHURE': ['documentos', 'documents', 'folleto', 'brochure'],
-        'TIME_DEDICATION_REQUIRED': ['dedicación', 'dedication', 'tiempo dedicar'],
-        'PHYSICAL_OFFICE_NEED': ['oficina', 'office', 'física', 'physical'],
-        'TRAINING_FOR_TEAM': ['capacitación', 'training', 'entrenamiento', 'formación'],
-        'EXPAND_TO_MULTIPLE_CITIES': ['expandir', 'expand', 'ciudades', 'cities'],
-        'VISIT_HEADQUARTERS': ['visitar', 'visit', 'oficinas', 'headquarters'],
-        'GROW_BEYOND_SALES': ['crecer', 'grow', 'más allá', 'beyond'],
-        'MULTIPLE_LANGUAGES_REQ': ['idiomas', 'languages'],
-        'MAIN_REQUIREMENTS_JOIN': ['requisitos', 'requirements', 'unirme', 'join'],
-        'CONTACT_OTHER_FRANCHISEES': ['franquiciados', 'franchisees', 'testimonios'],
-        'HOW_INTERNATIONAL_SYSTEM_WORKS': ['sistema', 'system', 'funciona', 'works'],
-        'GROW_QUICKLY_POSSIBLE': ['rápido', 'quickly', 'rápidamente'],
+        'INTERNATIONAL_PRESENCE': ['países', 'countries', 'dónde', 'where', 'ubicación', 'location', 'operan'],
+        'FRANCHISE_VS_MASTER': ['diferencia', 'difference', 'master', 'franquicia vs', 'franchise vs'],
+        'REQUIRED_EXPERIENCE': ['experiencia', 'experience', 'necesito', 'requisitos', 'requirements'],
+        'REVENUE_STREAMS': ['gano dinero', 'make money', 'ingresos', 'revenue', 'ganancias', 'profit'],
+        'SCALABILITY': ['escalable', 'scalable', 'crecimiento', 'growth', 'futuro'],
+        'OWN_BRAND': ['mi marca', 'my brand', 'propia marca', 'own brand', 'nombre', 'name'],
+        'PHYSICAL_OFFICE': ['oficina', 'office', 'física', 'physical', 'local'],
+        'SUPPORT_AND_TRAINING': ['apoyo', 'support', 'ayuda', 'help', 'capacitación', 'training'],
+        'MARKETING_SUPPORT': ['marketing', 'publicidad', 'advertising', 'promoción'],
+        'TECHNOLOGY': ['tecnología', 'technology', 'herramientas', 'tools', 'platform', 'sistema'],
+        'INTERNATIONAL_CLIENTS': ['internacional', 'international', 'clientes', 'clients', 'extranjeros'],
+        'OBJECTION_LIMITED_TIME': ['tiempo', 'time', 'dedicación', 'dedication', 'ocupado', 'busy'],
+        'OBJECTION_MARKET_DOUBTS': ['mercado', 'market', 'país', 'country', 'dudas', 'doubt', 'funciona', 'work'],
+        'DOCUMENTATION': ['documentos', 'documents', 'folleto', 'brochure', 'pdf', 'presentación'],
+        'HUMAN_CONTACT': ['contactar', 'contact', 'hablar', 'speak', 'llamada', 'call', 'persona', 'person'],
+        'SOFT_CLOSING': ['siguiente', 'next', 'paso', 'step', 'empezar', 'start', 'proceder'],
     }
     
     matches = []
@@ -262,67 +240,45 @@ def find_similar_categories(user_question: str, top_n=3):
 def get_category_display_name(category: str, language: str = 'en') -> str:
     """Convert category key to friendly display name."""
     names_en = {
+        'GREETING': 'Greeting',
         'WHAT_IS_REALTYPLUS': 'What is RealtyPlus?',
-        'COUNTRIES_OPERATING_IN': 'What countries do you operate in?',
-        'FRANCHISE_INCLUSIONS': 'What does the franchise include?',
-        'FRANCHISE_VS_MASTER': 'Difference between franchise and master franchise',
-        'REAL_ESTATE_EXPERIENCE_REQ': 'Real estate experience required',
-        'START_ALONE_OR_TEAM': 'Can I start alone or do I need a team?',
-        'ONBOARDING_LAUNCH_TIME': 'Time to get started',
-        'SUPPORT_RECEIVED': 'Support I will receive',
-        'OPERATE_INTERNATIONALLY': 'International operations',
-        'STEPS_TO_GET_STARTED': 'Steps to get started',
-        'AREA_EXCLUSIVITY': 'Area exclusivity',
-        'MARKETING_ASSISTANCE': 'Marketing assistance',
-        'RECRUITMENT_ASSISTANCE': 'Recruitment assistance',
-        'TECHNOLOGY_TOOLS_OFFERED': 'Technology tools offered',
-        'CONTACT_EXPANSION_TEAM': 'Contact the expansion team',
-        'WHERE_CAN_I_OPEN': 'Where can I open?',
-        'WHY_CHOOSE_REALTYPLUS': 'Why choose RealtyPlus?',
-        'RECEIVE_DOCUMENTS_BROCHURE': 'Receive documents/brochure',
-        'TIME_DEDICATION_REQUIRED': 'Time dedication required',
-        'PHYSICAL_OFFICE_NEED': 'Physical office requirement',
-        'TRAINING_FOR_TEAM': 'Training for the team',
-        'EXPAND_TO_MULTIPLE_CITIES': 'Expand to multiple cities',
-        'VISIT_HEADQUARTERS': 'Visit headquarters',
-        'GROW_BEYOND_SALES': 'Grow beyond sales',
-        'MULTIPLE_LANGUAGES_REQ': 'Multiple languages requirement',
-        'MAIN_REQUIREMENTS_JOIN': 'Main requirements to join',
-        'CONTACT_OTHER_FRANCHISEES': 'Contact other franchisees',
-        'HOW_INTERNATIONAL_SYSTEM_WORKS': 'How the international system works',
-        'GROW_QUICKLY_POSSIBLE': 'Possibility of growing quickly',
+        'INTERNATIONAL_PRESENCE': 'International Presence',
+        'FRANCHISE_VS_MASTER': 'Franchise vs Master Franchise',
+        'REQUIRED_EXPERIENCE': 'Required Experience',
+        'REVENUE_STREAMS': 'Revenue Streams',
+        'SCALABILITY': 'Scalability',
+        'OWN_BRAND': 'Own Brand',
+        'PHYSICAL_OFFICE': 'Physical Office',
+        'SUPPORT_AND_TRAINING': 'Support & Training',
+        'MARKETING_SUPPORT': 'Marketing Support',
+        'TECHNOLOGY': 'Technology',
+        'INTERNATIONAL_CLIENTS': 'International Clients',
+        'OBJECTION_LIMITED_TIME': 'Limited Time Objection',
+        'OBJECTION_MARKET_DOUBTS': 'Market Doubts Objection',
+        'DOCUMENTATION': 'Documentation',
+        'HUMAN_CONTACT': 'Human Contact',
+        'SOFT_CLOSING': 'Next Steps',
     }
 
     names_es = {
+        'GREETING': 'Saludo',
         'WHAT_IS_REALTYPLUS': '¿Qué es RealtyPlus?',
-        'COUNTRIES_OPERATING_IN': '¿En qué países operan?',
-        'FRANCHISE_INCLUSIONS': '¿Qué incluye la franquicia?',
-        'FRANCHISE_VS_MASTER': 'Diferencia entre franquicia y master franquicia',
-        'REAL_ESTATE_EXPERIENCE_REQ': 'Experiencia en bienes raíces requerida',
-        'START_ALONE_OR_TEAM': '¿Puedo empezar solo o necesito un equipo?',
-        'ONBOARDING_LAUNCH_TIME': 'Tiempo para empezar',
-        'SUPPORT_RECEIVED': 'Apoyo que recibiré',
-        'OPERATE_INTERNATIONALLY': 'Operaciones internacionales',
-        'STEPS_TO_GET_STARTED': 'Pasos para comenzar',
-        'AREA_EXCLUSIVITY': 'Exclusividad territorial',
-        'MARKETING_ASSISTANCE': 'Ayuda de marketing',
-        'RECRUITMENT_ASSISTANCE': 'Ayuda de reclutamiento',
-        'TECHNOLOGY_TOOLS_OFFERED': 'Herramientas tecnológicas ofrecidas',
-        'CONTACT_EXPANSION_TEAM': 'Contactar al equipo de expansión',
-        'WHERE_CAN_I_OPEN': '¿Dónde puedo abrir?',
-        'WHY_CHOOSE_REALTYPLUS': '¿Por qué elegir RealtyPlus?',
-        'RECEIVE_DOCUMENTS_BROCHURE': 'Recibir documentos/folleto',
-        'TIME_DEDICATION_REQUIRED': 'Tiempo de dedicación requerido',
-        'PHYSICAL_OFFICE_NEED': 'Requisito de oficina física',
-        'TRAINING_FOR_TEAM': 'Capacitación para el equipo',
-        'EXPAND_TO_MULTIPLE_CITIES': 'Expandir a múltiples ciudades',
-        'VISIT_HEADQUARTERS': 'Visitar la sede',
-        'GROW_BEYOND_SALES': 'Crecer más allá de las ventas',
-        'MULTIPLE_LANGUAGES_REQ': 'Requisito de múltiples idiomas',
-        'MAIN_REQUIREMENTS_JOIN': 'Requisitos principales para unirse',
-        'CONTACT_OTHER_FRANCHISEES': 'Contactar a otros franquiciados',
-        'HOW_INTERNATIONAL_SYSTEM_WORKS': 'Cómo funciona el sistema internacional',
-        'GROW_QUICKLY_POSSIBLE': 'Posibilidad de crecer rápidamente',
+        'INTERNATIONAL_PRESENCE': 'Presencia Internacional',
+        'FRANCHISE_VS_MASTER': 'Franquicia vs Master Franquicia',
+        'REQUIRED_EXPERIENCE': 'Experiencia Requerida',
+        'REVENUE_STREAMS': 'Fuentes de Ingresos',
+        'SCALABILITY': 'Escalabilidad',
+        'OWN_BRAND': 'Marca Propia',
+        'PHYSICAL_OFFICE': 'Oficina Física',
+        'SUPPORT_AND_TRAINING': 'Soporte y Entrenamiento',
+        'MARKETING_SUPPORT': 'Soporte de Marketing',
+        'TECHNOLOGY': 'Tecnología',
+        'INTERNATIONAL_CLIENTS': 'Clientes Internacionales',
+        'OBJECTION_LIMITED_TIME': 'Objeción: Tiempo Limitado',
+        'OBJECTION_MARKET_DOUBTS': 'Objeción: Dudas del Mercado',
+        'DOCUMENTATION': 'Documentación',
+        'HUMAN_CONTACT': 'Contacto Humano',
+        'SOFT_CLOSING': 'Próximos Pasos',
     }
     if language == 'es':
         return names_es.get(category, category)
@@ -334,20 +290,15 @@ def get_category_display_name(category: str, language: str = 'en') -> str:
 
 async def start(update: Update, context):
     """Responds to the /start command."""
-    welcome_text = """Hello! 👋 I'm your RealtyPlus assistant. 
-    (If your want to make the questions in spanish you can, I will respond to you in Spanish too)
-
-I can help you with information about:
-• What is RealtyPlus
-• Franchises and requirements
-• Countries where we operate
-• Support and training
-• Steps to get started
-• And much more...
-
-What would you like to know?"""
+    # Reset user language on start if needed, or default to English
+    # We send the default GREETING from the database
+    greeting_text = RESPONSES.get('GREETING')
     
-    await update.message.reply_text(welcome_text)
+    if not greeting_text:
+        # Fallback if data.json is empty or missing GREETING
+        greeting_text = "Hello! Welcome to RealtyPlus. How can I help you today?"
+        
+    await update.message.reply_text(greeting_text)
 
 async def handle_message(update: Update, context):
     """Use the ai to classify the user's question and respond accordingly."""
