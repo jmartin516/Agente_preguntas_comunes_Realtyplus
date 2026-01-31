@@ -7,5 +7,3 @@ services:
     volumes:
       # Mount the .env file from the host to the container
       - ./.env:/app/.env
-      # Optional: Mount data.json if you want to update it without rebuilding (requires restart)
-      - ./data.json:/app/data.json
