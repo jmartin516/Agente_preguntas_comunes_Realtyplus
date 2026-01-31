@@ -4,6 +4,6 @@ services:
     container_name: realtyplus_bot
 
     restart: unless-stopped
-    volumes:
-      # Mount the .env file from the host to the container
-      - ./.env:/app/.env
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
