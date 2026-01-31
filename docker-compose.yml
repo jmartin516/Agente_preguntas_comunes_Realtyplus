@@ -1,7 +1,8 @@
 services:
   bot:
-    build: .
+    image: ghcr.io/jmartin516/agente_preguntas_comunes_realtyplus:latest
     container_name: realtyplus_bot
+
     restart: unless-stopped
     volumes:
       # Mount the .env file from the host to the container
