@@ -13,6 +13,7 @@ load_dotenv()
 # Get API keys from environment
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+WHATSAPP_CONTACT_LINK = os.getenv('WHATSAPP_CONTACT_LINK', 'https://wa.me/640710347') # Fallback to default if not set
 
 # Configure Gemini API
 if GEMINI_API_KEY:
@@ -334,7 +335,10 @@ async def handle_message(update: Update, context):
                     response_text = await translate_response(response_text, language)
                     await update.message.reply_text(response_text)
                     
-                    follow_up = "\n¿Tienes otra pregunta? Pregúntame lo que quieras." if language == 'es' else "\nDo you have another question? Feel free to ask me anything."
+                    if language == 'es':
+                        follow_up = f"¿Tienes otra pregunta? Pregúntame lo que quieras. También puedes contactar directamente con un agente de RealtyPlus aquí: {WHATSAPP_CONTACT_LINK}"
+                    else:
+                        follow_up = f"Do you have another question? Feel free to ask me anything. You can also contact a RealtyPlus agent directly here: {WHATSAPP_CONTACT_LINK}"
                     await update.message.reply_text(follow_up)
                 return
             else:
@@ -358,7 +362,10 @@ async def handle_message(update: Update, context):
         response_text = await translate_response(response_text, language)
         await update.message.reply_text(response_text)
         
-        follow_up = "\n¿Tienes otra pregunta? Pregúntame lo que quieras." if language == 'es' else "\nDo you have another question? Feel free to ask me anything."
+        if language == 'es':
+            follow_up = f"¿Tienes otra pregunta? Pregúntame lo que quieras. También puedes contactar directamente con un agente de RealtyPlus aquí: {WHATSAPP_CONTACT_LINK}"
+        else:
+            follow_up = f"Do you have another question? Feel free to ask me anything. You can also contact a RealtyPlus agent directly here: {WHATSAPP_CONTACT_LINK}"
         await update.message.reply_text(follow_up)
 
     else: 
